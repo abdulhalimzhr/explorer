@@ -1,6 +1,6 @@
 # File Explorer Web App
 
-A web-based file explorer application that lets you browse folders and files through a clean interface. The app provides folder tree navigation, search functionality, and file viewing capabilities.
+A cross-platform web-based file explorer application that lets you browse folders and files through a clean interface. The app provides folder tree navigation, search functionality, and file viewing capabilities.
 
 ## Technology Stack
 
@@ -24,27 +24,50 @@ A web-based file explorer application that lets you browse folders and files thr
 
 ## Quick Start
 
+### Mac/Linux
 ```bash
 git clone https://github.com/abdulhalimzhr/explorer.git
 cd explorer
-npm run start
+npm start
 ```
 
-For Docker:
-
-```bash
-npm run start
+### Windows
+```cmd
+git clone https://github.com/abdulhalimzhr/explorer.git
+cd explorer
+npm run start:windows
 ```
+
+## Platform Support
+
+This application supports all major platforms:
+
+- **macOS/Linux**: Uses bash scripts (default npm commands)
+- **Windows**: Uses batch files (`:windows` suffixed commands)
+- **Cross-platform**: Build, test, and dev commands work on all platforms
 
 ## Available Commands
 
+### Cross-Platform Commands
 ```bash
-npm run start          # Setup and run with Docker (includes setup.sh + docker-compose)
-npm run stop           # Stop and remove Docker containers with volumes
-npm run dev            # Run both servers in development mode (concurrently)
+npm run dev            # Run both servers in development mode
 npm run build          # Build both backend and frontend applications
 npm test               # Run all tests (backend + frontend)
-npm run clean          # Clean dependencies (runs clean.sh script)
+npm stop               # Stop Docker containers
+```
+
+### Platform-Specific Commands
+
+**Mac/Linux:**
+```bash
+npm start              # Setup and run with Docker
+npm run clean          # Clean dependencies and Docker volumes
+```
+
+**Windows:**
+```cmd
+npm run start:windows  # Setup and run with Docker
+npm run clean:windows  # Clean dependencies and Docker volumes
 ```
 
 ## Application URLs
@@ -57,25 +80,49 @@ After starting the application, you can access:
 
 ## Requirements
 
-- Bun (backend)
-- Node.js 18+ (frontend)
-- PostgreSQL (or Docker)
+- Node.js 18+ (required for all platforms)
+- Bun (preferred for backend, fallback to npm available)
+- Docker & Docker Compose (for containerized setup)
+- PostgreSQL (if running without Docker)
+
+### Platform-Specific Installation
+
+**Windows:**
+```cmd
+# Install Node.js (choose one):
+# - Download from https://nodejs.org/
+# - Use chocolatey: choco install nodejs
+# - Use scoop: scoop install nodejs
+# - Use winget: winget install OpenJS.NodeJS
+
+# Install Docker Desktop from https://docker.com/
+```
+
+**Mac:**
+```bash
+# Install Node.js (choose one):
+# - Download from https://nodejs.org/
+# - Use homebrew: brew install node
+# - Use nvm: nvm install 18 && nvm use 18
+
+# Install Docker Desktop or use homebrew: brew install docker docker-compose
+```
+
+**Linux:**
+```bash
+# Install Node.js (choose one):
+# - Download from https://nodejs.org/
+# - Use package manager: sudo apt install nodejs npm (Ubuntu/Debian)
+# - Use nvm: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Install Docker: https://docs.docker.com/engine/install/
+```
 
 ## Manual Setup
 
 ### Prerequisites
 
-Install these first:
-
-```bash
-# Install Bun
-curl -fsSL https://bun.sh/install | bash
-
-# Install Node.js (choose one):
-# - Download from https://nodejs.org/
-# - Use nvm: nvm install 18 && nvm use 18
-# - Use homebrew: brew install node
-```
+Choose your platform and install the required tools from the Requirements section above.
 
 ### Step by Step
 
@@ -88,18 +135,37 @@ cd explorer
 
 2. **Run the application**
 
+**Mac/Linux:**
 ```bash
 npm start
 ```
 
+**Windows:**
+```cmd
+npm run start:windows
+```
+
 That's it! The start command handles dependency installation, database setup, and starts the application with Docker.
 
-For development without Docker:
+### Development without Docker
 
+For development without Docker containers:
+
+**Mac/Linux:**
 ```bash
 # Setup environment files (if needed)
 cp apps/backend/.env.example apps/backend/.env
 cp apps/frontend/.env.example apps/frontend/.env
+
+# Run in development mode
+npm run dev
+```
+
+**Windows:**
+```cmd
+# Setup environment files (if needed)
+copy apps\backend\.env.example apps\backend\.env
+copy apps\frontend\.env.example apps\frontend\.env
 
 # Run in development mode
 npm run dev

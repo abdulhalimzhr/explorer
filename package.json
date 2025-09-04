@@ -4,12 +4,14 @@
   "private": true,
   "description": "A modern file explorer web application with mixed runtime architecture",
   "scripts": {
-    "start": "./scripts/setup.sh && docker-compose down && docker-compose up -d && echo 'App running at http://localhost:3000 (API: http://localhost:3001)'",
+    "start": "./scripts/setup.sh && ./scripts/docker-start.sh",
+    "start:windows": "scripts\\setup.bat && scripts\\docker-start.bat",
     "stop": "docker-compose down -v",
     "dev": "concurrently \"cd apps/backend && npm run dev\" \"cd apps/frontend && npm run dev\" --names \"backend,frontend\" --prefix-colors \"blue,green\"",
     "build": "cd apps/backend && npm run build && cd ../frontend && npm run build",
     "test": "cd apps/backend && npm test && cd ../frontend && npm run test",
-    "clean": "./scripts/clean.sh"
+    "clean": "./scripts/clean.sh",
+    "clean:windows": "scripts\\clean.bat"
   },
   "engines": {
     "node": ">=18.0.0"
