@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: explorer_postgres
+    environment:
+      POSTGRES_DB: explorer_db
+      POSTGRES_USER: explorer_user
+      POSTGRES_PASSWORD: explorer_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U explorer_user -d explorer_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - explorer_network
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: explorer_backend
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://explorer_user:explorer_pass@postgres:5432/explorer_db
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - explorer_network
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    container_name: explorer_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NUXT_PUBLIC_API_BASE: http://localhost:3001
+    depends_on:
+      - backend
+    networks:
+      - explorer_network
+
+volumes:
+  postgres_data:
+
+networks:
+  explorer_network:
+    driver: bridge
